@@ -1,0 +1,205 @@
+{
+  "source_record_count": 12,
+  "source_total_amount": "$19,657.00",
+  "source_average_amount": "$1,638.08",
+  "extracted_detail_record_count": 12,
+  "extracted_detail_total_amount": "$19,657.00",
+  "all_detail_rows_match_persisted_source_rows": true,
+  "all_detail_amounts_match": true,
+  "source_rows": [
+    {
+      "id": "INV-1001",
+      "recorded_at": "2026-07-02",
+      "category": "Analytics",
+      "customer": "Northstar Labs",
+      "region": "North",
+      "amount": "1850.00"
+    },
+    {
+      "id": "INV-1002",
+      "recorded_at": "2026-07-04",
+      "category": "Analytics",
+      "customer": "Juniper Works",
+      "region": "West",
+      "amount": "1320.50"
+    },
+    {
+      "id": "INV-1003",
+      "recorded_at": "2026-07-08",
+      "category": "Platform",
+      "customer": "Cedar & Co.",
+      "region": "East",
+      "amount": "2450.00"
+    },
+    {
+      "id": "INV-1004",
+      "recorded_at": "2026-07-11",
+      "category": "Platform",
+      "customer": "Aster Studio",
+      "region": "South",
+      "amount": "2180.00"
+    },
+    {
+      "id": "INV-1005",
+      "recorded_at": "2026-07-14",
+      "category": "Support",
+      "customer": "Mosaic Health",
+      "region": "West",
+      "amount": "760.25"
+    },
+    {
+      "id": "INV-1006",
+      "recorded_at": "2026-07-16",
+      "category": "Support",
+      "customer": "Northstar Labs",
+      "region": "North",
+      "amount": "980.00"
+    },
+    {
+      "id": "INV-1007",
+      "recorded_at": "2026-07-19",
+      "category": "Analytics",
+      "customer": "River City Foods",
+      "region": "South",
+      "amount": "1105.75"
+    },
+    {
+      "id": "INV-1008",
+      "recorded_at": "2026-07-22",
+      "category": "Platform",
+      "customer": "Juniper Works",
+      "region": "West",
+      "amount": "3190.00"
+    },
+    {
+      "id": "INV-1009",
+      "recorded_at": "2026-07-24",
+      "category": "Support",
+      "customer": "Cedar & Co.",
+      "region": "East",
+      "amount": "895.50"
+    },
+    {
+      "id": "INV-1010",
+      "recorded_at": "2026-07-27",
+      "category": "Analytics",
+      "customer": "Aster Studio",
+      "region": "South",
+      "amount": "1560.00"
+    },
+    {
+      "id": "INV-1011",
+      "recorded_at": "2026-07-29",
+      "category": "Platform",
+      "customer": "Mosaic Health",
+      "region": "West",
+      "amount": "2725.00"
+    },
+    {
+      "id": "INV-1012",
+      "recorded_at": "2026-07-31",
+      "category": "Support",
+      "customer": "River City Foods",
+      "region": "North",
+      "amount": "640.00"
+    }
+  ],
+  "extracted_detail_rows": [
+    {
+      "id": "INV-1001",
+      "recorded_at": "2026-07-02",
+      "category": "Analytics",
+      "customer": "Northstar Labs",
+      "region": "North",
+      "amount": "1850.00"
+    },
+    {
+      "id": "INV-1002",
+      "recorded_at": "2026-07-04",
+      "category": "Analytics",
+      "customer": "Juniper Works",
+      "region": "West",
+      "amount": "1320.50"
+    },
+    {
+      "id": "INV-1003",
+      "recorded_at": "2026-07-08",
+      "category": "Platform",
+      "customer": "Cedar & Co.",
+      "region": "East",
+      "amount": "2450.00"
+    },
+    {
+      "id": "INV-1004",
+      "recorded_at": "2026-07-11",
+      "category": "Platform",
+      "customer": "Aster Studio",
+      "region": "South",
+      "amount": "2180.00"
+    },
+    {
+      "id": "INV-1005",
+      "recorded_at": "2026-07-14",
+      "category": "Support",
+      "customer": "Mosaic Health",
+      "region": "West",
+      "amount": "760.25"
+    },
+    {
+      "id": "INV-1006",
+      "recorded_at": "2026-07-16",
+      "category": "Support",
+      "customer": "Northstar Labs",
+      "region": "North",
+      "amount": "980.00"
+    },
+    {
+      "id": "INV-1007",
+      "recorded_at": "2026-07-19",
+      "category": "Analytics",
+      "customer": "River City Foods",
+      "region": "South",
+      "amount": "1105.75"
+    },
+    {
+      "id": "INV-1008",
+      "recorded_at": "2026-07-22",
+      "category": "Platform",
+      "customer": "Juniper Works",
+      "region": "West",
+      "amount": "3190.00"
+    },
+    {
+      "id": "INV-1009",
+      "recorded_at": "2026-07-24",
+      "category": "Support",
+      "customer": "Cedar & Co.",
+      "region": "East",
+      "amount": "895.50"
+    },
+    {
+      "id": "INV-1010",
+      "recorded_at": "2026-07-27",
+      "category": "Analytics",
+      "customer": "Aster Studio",
+      "region": "South",
+      "amount": "1560.00"
+    },
+    {
+      "id": "INV-1011",
+      "recorded_at": "2026-07-29",
+      "category": "Platform",
+      "customer": "Mosaic Health",
+      "region": "West",
+      "amount": "2725.00"
+    },
+    {
+      "id": "INV-1012",
+      "recorded_at": "2026-07-31",
+      "category": "Support",
+      "customer": "River City Foods",
+      "region": "North",
+      "amount": "640.00"
+    }
+  ]
+}

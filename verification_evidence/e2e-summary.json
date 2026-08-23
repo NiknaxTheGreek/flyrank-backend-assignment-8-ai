@@ -1,0 +1,26 @@
+{
+  "http_return_ms": 15.1,
+  "observed_states": {
+    "pending": "pending",
+    "running": "running",
+    "completed": "completed"
+  },
+  "final_status": "completed",
+  "pdf_signature": "%PDF-",
+  "pdf_size_bytes": 3660,
+  "page_count": 2,
+  "text_tokens_verified": [
+    "Records processed: 12",
+    "Total amount: $19,657.00",
+    "Average amount: $1,638.08",
+    "Detailed source records"
+  ],
+  "full_detail_reconciliation_verified": true,
+  "rendered_previews": [
+    "verification_evidence/report-one-page-1.png",
+    "verification_evidence/report-one-page-2.png"
+  ],
+  "worker_restart_persisted": true,
+  "second_artifact_reference": "632848d2-a5a8-477f-94c0-109ccf2f2b3d.pdf",
+  "visual_inspection": "Rendered aggregate and detailed-record pages reviewed: no clipped or broken content visible."
+}
