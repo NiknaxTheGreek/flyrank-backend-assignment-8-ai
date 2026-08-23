@@ -32,4 +32,13 @@ PYTHONPATH=artifacts/flyrank-pdf-report-generator pytest artifacts/flyrank-pdf-r
 python artifacts/flyrank-pdf-report-generator/report_service/scripts/e2e_verify.py
 ```
 
-The end-to-end verification writes PDFs, a PNG render, logs, and a data-to-PDF comparison under `verification_evidence/`.
+The latest recorded checkpoint completed on the local verification runtime with:
+
+- 8 automated tests passing (3 dependency deprecation warnings);
+- a report request returning in 15.1 ms before worker completion;
+- observed `pending`, `running`, and `completed` states;
+- a valid 3,660-byte, two-page PDF;
+- full row-by-row reconciliation of all persisted source records and amounts against extracted PDF detail rows;
+- a separate-worker restart that produced a distinct retained artifact.
+
+The end-to-end verification writes PDFs, two PNG page renders, logs, and the complete data-to-PDF comparison under `verification_evidence/`.

@@ -76,6 +76,22 @@ def test_multiple_jobs_have_unique_artifacts(client: TestClient) -> None:
     assert first_reference and second_reference and first_reference != second_reference
 
 
+def test_missing_completed_artifact_returns_not_found_not_downloadable(client: TestClient) -> None:
+    job = client.post("/api/reports", json={"title": "Missing artifact report", "delay_seconds": 0}).json()
+    process_one()
+    completed = client.get(f"/api/reports/{job['id']}").json()
+    assert completed["status"] == "completed"
+    reference = completed["artifact_reference"]
+    assert reference
+    artifact_path(reference).unlink()
+
+    result = client.get(f"/api/reports/{job['id']}/result")
+    assert result.status_code == 404
+    assert result.json()["detail"] == "Report artifact not found"
+    assert result.headers.get("content-type", "").split(";")[0] == "application/json"
+    assert not result.content.startswith(b"%PDF")
+
+
 def test_controlled_failure_never_exposes_partial_pdf(client: TestClient) -> None:
     job = client.post(
         "/api/reports", json={"title": "Failure report", "delay_seconds": 0, "simulate_failure": True}
