@@ -1,0 +1,1 @@
+"""Independent PDF report service implementation."""

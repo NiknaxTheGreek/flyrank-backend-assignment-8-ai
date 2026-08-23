@@ -1,0 +1,39 @@
+kind = "web"
+previewPath = "/"
+title = "PDF Report Generator"
+description = "An independent report-generation assignment implementation with a web interface, FastAPI job API, separate worker process, persisted source data, and downloadable PDF artifacts."
+version = "1.0.0"
+id = "artifacts/flyrank-pdf-report-generator"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19156
+
+[services.development]
+run = "pnpm --filter @workspace/flyrank-pdf-report-generator run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/flyrank-pdf-report-generator", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/flyrank-pdf-report-generator/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19156"
+BASE_PATH = "/"
+
+[[services]]
+name = "PDF Report API"
+paths = [ "/api" ]
+localPort = 8000
+
+[services.development]
+run = "PYTHONPATH=artifacts/flyrank-pdf-report-generator python -m uvicorn report_service.api:app --host 0.0.0.0 --port $PORT"
+
+[services.env]
+PORT = "8000"

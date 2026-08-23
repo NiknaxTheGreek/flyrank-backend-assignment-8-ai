@@ -47,3 +47,11 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# PDF report generator runtime state and reproducible verification artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+artifacts/flyrank-pdf-report-generator/report_service/runtime/
+artifacts/flyrank-pdf-report-generator/report_service/reports/
+verification_evidence/

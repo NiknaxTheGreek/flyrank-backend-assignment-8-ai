@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: reports
+    description: Report job operations. These routes are implementation assumptions for this independent project.
 paths:
   /healthz:
     get:
@@ -24,7 +26,97 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /reports:
+    get:
+      operationId: listReports
+      tags: [reports]
+      summary: List report jobs
+      description: Lists retained report jobs, newest first.
+      responses:
+        "200":
+          description: Report jobs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReportJob"
+    post:
+      operationId: createReport
+      tags: [reports]
+      summary: Queue a report
+      description: Creates a pending report job and returns without waiting for PDF generation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReportRequest"
+      responses:
+        "202":
+          description: Report job accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReportJob"
+        "422":
+          description: Invalid input
+  /reports/{job_id}:
+    get:
+      operationId: getReport
+      tags: [reports]
+      summary: Get report job status
+      parameters:
+        - $ref: "#/components/parameters/ReportJobId"
+      responses:
+        "200":
+          description: Report job
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReportJob"
+        "404":
+          description: Job not found
+  /reports/{job_id}/result:
+    get:
+      operationId: downloadReport
+      tags: [reports]
+      summary: Download a completed report PDF
+      parameters:
+        - $ref: "#/components/parameters/ReportJobId"
+      responses:
+        "200":
+          description: PDF document
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Job or completed artifact not found
+        "409":
+          description: Job has not completed successfully
+  /source-summary:
+    get:
+      operationId: getSourceSummary
+      tags: [reports]
+      summary: View source data aggregate
+      description: Returns a read-only aggregate of the seeded source records.
+      responses:
+        "200":
+          description: Source aggregate
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SourceSummary"
 components:
+  parameters:
+    ReportJobId:
+      name: job_id
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
     HealthStatus:
       type: object
@@ -33,4 +125,63 @@ components:
           type: string
       required:
         - status
+    ReportRequest:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+          minLength: 3
+          maxLength: 100
+        delay_seconds:
+          type: number
+          minimum: 0
+          maximum: 10
+          default: 0.4
+        simulate_failure:
+          type: boolean
+          default: false
+    ReportJob:
+      type: object
+      required: [id, title, status, created_at, updated_at, source_record_count]
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        status:
+          type: string
+          enum: [pending, running, completed, failed]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        started_at:
+          type: [string, "null"]
+          format: date-time
+        completed_at:
+          type: [string, "null"]
+          format: date-time
+        artifact_reference:
+          type: [string, "null"]
+        error_message:
+          type: [string, "null"]
+        source_record_count:
+          type: number
+    SourceSummary:
+      type: object
+      required: [record_count, total_amount, average_amount, category_totals]
+      properties:
+        record_count:
+          type: number
+        total_amount:
+          type: number
+        average_amount:
+          type: number
+        category_totals:
+          type: object
+          additionalProperties:
+            type: number
 
