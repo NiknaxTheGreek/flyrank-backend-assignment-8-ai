@@ -1,0 +1,71 @@
+name: Assignment 8 S3 Gate
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "artifacts/flyrank-pdf-report-generator/report_service/**"
+      - "pyproject.toml"
+      - "README.md"
+      - "REQUIREMENTS_AUDIT.md"
+      - "SOURCE_GAP_AND_ASSUMPTIONS.md"
+      - "VERIFICATION_EVIDENCE.md"
+      - ".github/workflows/assignment-8-s3.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install packaged report service
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install .
+
+      - name: Compile report service
+        run: python -m compileall -q artifacts/flyrank-pdf-report-generator/report_service
+
+      - name: Run automated tests
+        env:
+          PYTHONPATH: artifacts/flyrank-pdf-report-generator
+        run: python -m pytest artifacts/flyrank-pdf-report-generator/report_service/tests -q
+
+      - name: Run end-to-end background PDF checkpoint
+        run: python artifacts/flyrank-pdf-report-generator/report_service/scripts/e2e_verify.py
+
+      - name: Verify S3 artifact reference rule
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          summary=json.loads(Path('verification_evidence/e2e-summary.json').read_text())
+          assert summary['final_status'] == 'completed'
+          assert summary['pdf_signature'] == '%PDF-'
+          assert summary['full_detail_reconciliation_verified'] is True
+          assert summary['worker_restart_persisted'] is True
+          assert summary['second_artifact_reference'].endswith('.pdf')
+          print('A8_BACKGROUND_PDF_GATE=PASS')
+          PY
+
+      - name: Upload current PDF evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assignment-8-pdf-runtime-evidence
+          path: verification_evidence/
+          if-no-files-found: warn

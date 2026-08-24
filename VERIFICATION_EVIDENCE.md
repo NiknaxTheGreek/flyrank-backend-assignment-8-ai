@@ -1,28 +1,43 @@
-# Verification evidence
+# Assignment 8 Verification Evidence
 
-Run the commands below to refresh the durable runtime evidence:
+This file records executed observations. It does not infer successful runtime behaviour from code alone.
 
-```bash
-PYTHONPATH=artifacts/flyrank-pdf-report-generator pytest artifacts/flyrank-pdf-report-generator/report_service/tests -q | tee verification_evidence/pytest-output.txt
-python artifacts/flyrank-pdf-report-generator/report_service/scripts/e2e_verify.py
-```
+## Current GitHub Actions checkpoint — 2026-08-24
 
-The E2E run produces:
+Run: `32711411586`
 
-- `report-one.pdf` — downloaded HTTP result;
-- `report-one-page-1.png` and `report-one-page-2.png` — rendered previews of the aggregate and detailed-record PDF pages;
-- `e2e-summary.json` and `e2e-output.txt` — request timing, explicitly observed `pending`/`running`/`completed` states, signature, size, page count, restart persistence, and visual review;
-- `integrity-comparison.json` — persisted source rows, fully extracted detailed PDF rows, per-row amounts, and aggregate reconciliation;
-- `runtime/` — SQLite data and generated worker artifacts proving persistence.
+The current Assignment 8 implementation was executed on a GitHub-hosted Ubuntu runner with Python 3.13.
 
-The implementation’s safety condition is that only a fully rendered, readable PDF is atomically published and then marked `completed`. A failure leaves the job `failed` and removes partial output.
+| Checkpoint | Observed result |
+| --- | --- |
+| Dependency installation | PASS |
+| Python compilation | PASS |
+| Automated tests | **8 passed**, 3 non-failing dependency/deprecation warnings |
+| On-demand report request | HTTP `202`; returned in **22.2 ms** before worker completion |
+| Background-state progression | `pending → running → completed` |
+| Separate worker | E2E starts worker only after `pending` is observed |
+| PDF signature | `%PDF-` |
+| PDF size | **3,659 bytes** |
+| PDF pages | **2** |
+| Persisted source rows | **12** |
+| Verified report total | **$19,657.00** |
+| Verified report average | **$1,638.08** |
+| Detailed reconciliation | every extracted PDF row/order/amount matched the SQLite source rows |
+| Render evidence | two PNG page renders were generated and checked as non-empty files |
+| Worker restart | first worker terminated; new worker processed second job successfully |
+| Artifact retention | second completed report had a distinct `.pdf` artifact reference |
+| Acceptance marker | `A8_BACKGROUND_PDF_GATE=PASS` |
 
-## Latest observed checkpoint
+The workflow uploaded the generated runtime directory as the `assignment-8-pdf-runtime-evidence` artifact.
 
-- Automated suite: **8 passed, 3 warnings in 0.93s**.
-- E2E request return time: **15.1 ms**.
-- States captured in order: **pending → running → completed**.
-- Downloaded PDF: **`%PDF-` signature, 3,660 bytes, 2 pages**.
-- Integrity: **all 12 extracted detailed rows and amounts exactly matched the persisted source rows; recomputed total was $19,657.00 and average was $1,638.08**.
-- Worker restart: a second completed report retained a distinct artifact reference.
-- Render review: aggregate and detailed-record PNG pages showed no clipped or broken content.
+## Important evidence boundary
+
+The current CI run programmatically generated two page renders and verified their files. The E2E script also emits a pre-existing `visual_inspection` text field, but this automated CI run is **not** claimed as a new human visual inspection. The current acceptance claims only what the workflow actually executed and checked.
+
+## Packaging follow-up
+
+Run `32711411586` used explicit dependency installation after an earlier `pip install .` attempt exposed an unrelated flat-workspace setuptools discovery problem. The branch subsequently scopes root package discovery to `artifacts/flyrank-pdf-report-generator/report_service` and changes CI back to `python -m pip install .`. That clean-install checkpoint must pass before the branch is merged.
+
+## Earlier evidence
+
+The repository's earlier local E2E evidence independently recorded the same architectural behaviour: asynchronous request/worker separation, a valid two-page PDF, full source-data reconciliation, rendered pages, and a distinct artifact after worker restart. The current GitHub Actions run above supersedes that evidence for current-code runtime acceptance except for any explicitly manual visual-review claim.
