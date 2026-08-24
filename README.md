@@ -12,7 +12,7 @@ The assignment's authoritative S3 source intentionally does **not** prescribe ex
 
 `POST /api/reports` creates a persisted report job and returns HTTP `202` while it is still `pending`. A separate `python -m report_service.worker` process claims pending jobs, queries the persisted source rows, prepares aggregate values, renders the report to a temporary file, validates the PDF, atomically publishes it, and stores only the resulting filename/reference in the job row.
 
-The PDF binary is **not** carried inside the job payload or job record. The database stores `artifact_reference`, and `GET /api/reports/{job_id}/result` resolves that reference to the stored PDF when the job is complete. This directly implements S3's “store and link; do not pass a large artifact through job payloads” rule. fileciteturn456file0
+The PDF binary is **not** carried inside the job payload or job record. The database stores `artifact_reference`, and `GET /api/reports/{job_id}/result` resolves that reference to the stored PDF when the job is complete. This directly implements S3's “store and link; do not pass a large artifact through job payloads” rule.
 
 ## Routes
 
